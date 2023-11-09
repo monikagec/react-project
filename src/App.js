@@ -1,24 +1,30 @@
-import logo from './logo.svg';
+import { loadStripe } from '@stripe/stripe-js';
 import './App.css';
-
+import CheckoutForm from './components/CheckoutForm';
+import { Elements } from '@stripe/react-stripe-js';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
+import Header from './components/Header';
+import Home from './components/Home';
+import Cart from './components/Cart';
+import { ToastContainer } from 'react-toastify';
+const stripePromise = loadStripe('pk_test_51MwPQuSBD8MtMZAoDOk33CGs935GKRdxMeR3HN4Rro4g8HIuIPOMfDRLHoEYWPFPHIpK0RfN5Gc9zbKOhqcMzMPn00z8zgZCFw');
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/checkout' element={
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm />
+                </Elements>
+              } />
+            </Routes>
+        </BrowserRouter>
+        <ToastContainer />
+      </>
   );
 }
 
